@@ -1,6 +1,4 @@
 const axios = require('axios');
-const mqtt = require('mqtt');
-const mqtt_publisher = mqtt.connect('wss://auoh-mqtt-broker.herokuapp.com');
 
 const main_loop = () => {
     setTimeout(() => {
@@ -21,14 +19,11 @@ const main_loop = () => {
                     const value = parseFloat(match[1]);
                     joints.push(value);
                 }
+
                 console.log(start_time_stamp, joints, delta, 'ms');
-                mqtt_publisher.publish('joints', JSON.stringify(joints));
                 main_loop();
             });
     }, 10);
 }
 
-mqtt_publisher.on('connect', () => {
-    console.log('connected to mqtt broker');
-    main_loop();
-});
+main_loop();
